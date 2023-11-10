@@ -1,0 +1,21 @@
+---
+- name: Install Software
+  hosts: webservers
+
+  become: yes
+
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install Nginx, MySQL, Tree, Vim
+      apt:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - nginx
+        - mysql-server
+        - tree
+        - vim
+
