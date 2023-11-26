@@ -1,22 +1,35 @@
 ---
-- name: Install Software
+- name: Setup and Install Packages on Azure VM
   hosts: webservers
-
   become: yes
+  become_user: azureuser  # Replace with your Azure VM username
 
   tasks:
     - name: Update apt cache
       apt:
         update_cache: yes
 
-    - name: Install Nginx, MySQL, Tree, Vim, Git
+    - name: Upgrade all packages
       apt:
-        name: "{{ item }}"
-        state: present
-      loop:
-        - nginx
-        - mysql-server
-        - tree
-        - vim
-        - git
+        upgrade: dist
 
+    - name: Install required packages
+      apt:
+        name: "{{ packages }}"
+        state: present
+
+    - name: Upgrade all packages (again)
+      apt:
+        upgrade: dist
+
+  vars:
+    packages:
+      - docker-ce
+      - nodejs=12
+      - npm
+      - python3
+      - nginx
+      - tree
+      - vim
+      - git
+      - pm2
